@@ -1,0 +1,23 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true
+    },
+    "extends": "eslint:recommended",
+    "overrides": [
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "rules": {
+        "no-unused-vars": "warn",
+        "no-prototype-builtins": "off",
+        "no-empty": "warn",
+        "no-useless-escape": "off"
+    },
+    "globals": {
+        "process": "readonly",
+        "__dirname": "readonly"
+    }
+}
