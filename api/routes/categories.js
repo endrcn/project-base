@@ -14,7 +14,7 @@ router.post('*', auth.authenticate(), function (req, res, next) {
   next();
 })
 
-router.post('/', auth.checkRole("category_view", "instruction_view", "instruction_view_partial"), async (req, res) => {
+router.post('/', auth.checkRole("category_view"), async (req, res) => {
   try {
 
     let body = req.body;
@@ -32,7 +32,7 @@ router.post('/', auth.checkRole("category_view", "instruction_view", "instructio
   }
 });
 
-router.post('/brokerages', auth.checkRole("category_view", "instruction_view", "instruction_view_partial"), async (req, res) => {
+router.post('/brokerages', auth.checkRole("category_view"), async (req, res) => {
   try {
 
     let body = req.body;

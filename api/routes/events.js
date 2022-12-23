@@ -18,10 +18,10 @@ router.get('/', async (req, res) => {
     res.write(`data: ${JSON.stringify(data)}\n\n`);
   }
 
-  emitter.getEmitter("events").on(Enum.EMITTERS.INSTRUCTIONS, listener);
+  emitter.getEmitter("events").on(Enum.EMITTERS.NOTIFICATION, listener);
 
   req.on('close', () => {
-    emitter.getEmitter("events").off(Enum.EMITTERS.INSTRUCTIONS, listener);
+    emitter.getEmitter("events").off(Enum.EMITTERS.NOTIFICATION, listener);
   });
 
 });

@@ -11,7 +11,6 @@ const Response = require("../lib/Response");
 const Error = require("../lib/Error");
 const i18n = require("../i18n");
 const RolePrivileges = require("../db/models/RolePrivileges");
-const Roles = require("../db/models/Roles");
 
 let params = {
     secretOrKey: config.JWT.SECRET,
@@ -28,7 +27,6 @@ module.exports = function () {
                 let user = users[0];
 
                 let userRoles = await UserRoles.findAll({ where: { user_id: user._id } });
-                let roles = await Roles.findAll({ where: { _id: { $in: userRoles.map(x => x.role_id) } } });
 
                 let privileges = (await RolePrivileges.findAll({ where: { role_id: { $in: userRoles.map(x => x.role_id) } }, raw: true })).map(x => {
                     x.privilege = Enum.Privileges.find(p => p.Key == x.permission);
@@ -41,7 +39,6 @@ module.exports = function () {
                     first_name: user.first_name,
                     last_name: user.last_name,
                     roles: privileges,
-                    levels: roles.map(x => x.level),
                     exp: parseInt(Date.now() / 1000) + config.TOKEN_EXPIRE_TIME
                 });
 

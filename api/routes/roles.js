@@ -56,20 +56,17 @@ router.post('/add', auth.checkRole("role_add"), async (req, res) => {
 
     let body = req.body;
 
-    check.areThereEmptyFields(body, "role_name", "permissions", "level");
+    check.areThereEmptyFields(body, "role_name", "permissions");
 
     if (!Array.isArray(body.permissions) || body.permissions.length == 0) {
       throw new Error(Enum.HTTP_CODES.NOT_ACCEPTABLE, i18n.COMMON.VALIDATION_ERROR_TITLE, i18n.ROLES.PERMISSION_VALIDATION_ERROR);
     }
 
-    if (!check.isNumeric(body.level) || body.level < 1) throw new Error(Enum.HTTP_CODES.NOT_ACCEPTABLE, i18n.COMMON.VALIDATION_ERROR_TITLE, i18n.ROLES.LEVEL_VALIDATION_ERROR);
-
     let role = new Roles({
       role_name: body.role_name,
       description: body.description,
       is_active: true,
-      created_by: req.user.id,
-      level: body.level
+      created_by: req.user.id
     });
 
     await role.save();
@@ -105,7 +102,6 @@ router.post('/update', auth.checkRole("role_update"), async (req, res) => {
     if (body.role_name) updates.role_name = body.role_name;
     if (body.description) updates.description = body.description;
     if (typeof body.is_active === "boolean") updates.is_active = body.is_active;
-    if (check.isNumeric(body.level) && body.level >= 1) updates.level = body.level;
 
     updates.updated_by = req.user.id;
 

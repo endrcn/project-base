@@ -11,7 +11,7 @@ router.post('*', auth.authenticate(), function (req, res, next) {
   next();
 })
 
-router.post('/', auth.checkRole("auditlog_view", "dashboard_view"), async (req, res) => {
+router.post('/', auth.checkRole("auditlog_view"), async (req, res) => {
   try {
 
     let body = req.body;
@@ -33,9 +33,9 @@ router.post('/', auth.checkRole("auditlog_view", "dashboard_view"), async (req, 
       limit = body.limit;
     }
 
-    let categories = await AuditLogs.findAll({ where: query, order: [["createdAt", "DESC"]], limit });
+    let logs = await AuditLogs.findAll({ where: query, order: [["createdAt", "DESC"]], limit });
 
-    return res.json(new Response().generateResponse(categories));
+    return res.json(new Response().generateResponse(logs));
   } catch (err) {
     let response = new Response().generateError(err);
     res.status(response.code)

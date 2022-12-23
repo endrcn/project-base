@@ -18,8 +18,7 @@ class Roles extends Sequelize.Model {
                 description: { type: DataTypes.TEXT },
                 is_active: { type: DataTypes.BOOLEAN, defaultValue: true },
                 created_by: { type: DataTypes.UUID, allowNull: false },
-                updated_by: { type: DataTypes.UUID },
-                level: { type: DataTypes.INTEGER }
+                updated_by: { type: DataTypes.UUID }
             },
             {
                 indexes: [
@@ -49,11 +48,6 @@ class Roles extends Sequelize.Model {
 
     static async remove(query) {
         await super.destroy({ where: query });
-    }
-
-    static async getMaxLevel() {
-        let roles = await super.findAll({ where: {}, order: [["level", "DESC"]] });
-        return (roles[0] || {}).level || 1;
     }
 
 }

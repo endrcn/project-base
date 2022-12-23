@@ -17,7 +17,7 @@ const check = new (require("../lib/Check"))();
 const Error = require("../lib/Error");
 const auditLogs = require("../lib/AuditLogs");
 
-router.post("/", auth.authenticate(), auth.checkRole("user_view", "instruction_view", "instruction_view_partial"), async (req, res) => {
+router.post("/", auth.authenticate(), auth.checkRole("user_view"), async (req, res) => {
   let body = req.body;
   let query = {};
   try {
@@ -117,7 +117,7 @@ router.post("/register", async (req, res) => {
       throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, i18n.USERS.VALIDATION_ERROR_TITLE, i18n.USERS.VALIDATION_ERROR_INFO);
     data.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(8), null);
 
-    let superUsers = await User.findAll({ where: { level: 0 } });
+    let superUsers = await User.findAll({ where: { is_super_admin: true } });
 
     if (superUsers.length > 0) {
       return res.sendStatus(Enum.HTTP_CODES.NOT_FOUND);
@@ -129,7 +129,6 @@ router.post("/register", async (req, res) => {
       first_name: data.first_name,
       last_name: data.last_name,
       phone_number: data.phone_number || "",
-      level: 0,
       is_active: true
     });
 
@@ -169,7 +168,8 @@ router.post("/add", auth.authenticate(), auth.checkRole("user_add"), async (req,
       last_name: data.last_name,
       phone_number: data.phone_number || "",
       is_active: true,
-      created_by: req.user.id
+      created_by: req.user.id,
+      language: Enum.LANG[data.language] || "en"
     });
 
     await user.save();
@@ -218,7 +218,11 @@ router.post("/update", auth.authenticate(), auth.checkRole("user_update"), async
         updates.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(8), null);
       }
 
-      if (!check.isEmpty(data.role_ids) && data.role_ids.length == 0 && user.level != 0)
+      if (data.language && Enum.LANG[data.language]) {
+        updates.language = data.language;
+      }
+
+      if (!check.isEmpty(data.role_ids) && data.role_ids.length == 0 && !user.is_super_admin)
         throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, i18n.USERS.VALIDATION_ERROR_TITLE, i18n.USERS.ROLE_MUST_ERROR);
       else {
 

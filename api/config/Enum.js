@@ -22,7 +22,7 @@ let Enum = {
     },
 
     EMITTERS: {
-        INSTRUCTIONS: "instructions"
+        NOTIFICATION: "notification"
     },
 
     PASS_LENGTH: 8,
@@ -32,32 +32,9 @@ let Enum = {
         USER: "USER"
     },
 
-    ENTITY_TYPES: {
-        "SINGLE": "SINGLE",
-        "COMPOSITE": "COMPOSITE",
-        "DYNAMIC": "DYNAMIC"
-    },
-
-    INSTRUCTION_ACTIONS: {
-        APPROVE: 1,
-        REJECT: 0,
-        PASS_TO_LAST: 2,
-        PASS_TO_MAN: 3,
-        RETURN_TO_START: 4
-    },
-
-    CATEGORY_TYPES: {
-        "INSTRUCTION": 0,
-        "FILE_ARCHIVE": 1
-    },
-
 
     privGroups: [
 
-        {
-            id: "Dashboard",
-            name: "Dashboard Permissions"
-        },
         {
             id: "User",
             name: "User Permissions"
@@ -76,13 +53,6 @@ let Enum = {
         }
     ],
     Privileges: [
-        {
-            Key: "dashboard_view",
-            Name: "View",
-            Group: "Dashboard",
-            Description: "Dashboard Permissions",
-            type: "system"
-        },
         {
             Key: "user_view",
             Name: "View",
@@ -198,6 +168,11 @@ let Enum = {
         "DEBUG": 5,
         "SILLY": 6
     },
+
+    LANG: {
+        "en": "en",
+        "tr": "tr"
+    }
 }
 
 module.exports = Enum;

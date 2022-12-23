@@ -5,12 +5,10 @@ module.exports = {
         PASSWORD_LENGTH_ERROR: "Şifre en az 8 karakterden oluşmalıdır.",
         ROLE_MUST_ERROR: "En az bir tane rol seçilmelidir.",
         EMAIL_VALIDATION_ERROR: "Lütfen geçerli bir email adresi giriniz.",
-        USER_NOT_FOUND: "Kullanıcı bulunamadı.",
-        LEVEL_ERROR: "Kullanıcı seviyesi değeri 0 olamaz."
+        USER_NOT_FOUND: "Kullanıcı bulunamadı."
     },
     ROLES: {
-        PERMISSION_VALIDATION_ERROR: "Lütfen en az bir yetki seçiniz.",
-        LEVEL_VALIDATION_ERROR: "Rol seviyesi bir sayı olmalı ve en az 1 olmalıdır."
+        PERMISSION_VALIDATION_ERROR: "Lütfen en az bir yetki seçiniz."
     },
     COMMON: {
         VALIDATION_ERROR_TITLE: "Hata!",

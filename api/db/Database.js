@@ -7,8 +7,6 @@
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
-const async = require("async");
-
 const config = require("../config");
 
 const UserModel = require("./models/Users");
@@ -132,18 +130,18 @@ class Database {
             .then(() => { }).catch(err => { console.error("CONN ERR", err.message); });
     }
 
-    initialModels(sequelize) {
-
-        UserModel.init(sequelize, Sequelize).sync()
-            .then(RoleModel.init(sequelize, Sequelize).sync())
-            .then(RolePrivilegeModel.init(sequelize, Sequelize).sync())
-            .then(UserRoles.init(sequelize, Sequelize).sync())
-            .then(Categories.init(sequelize, Sequelize).sync())
-            .then(AuditLogs.init(sequelize, Sequelize).sync()).then(() => {
-                console.log("All tables are created/altered");
-            }).catch(err => {
-                console.error("Table creation error", err);
-            });
+    async initialModels(sequelize) {
+        try {
+            await UserModel.init(sequelize, Sequelize).sync();
+            await RoleModel.init(sequelize, Sequelize).sync();
+            await RolePrivilegeModel.init(sequelize, Sequelize).sync();
+            await UserRoles.init(sequelize, Sequelize).sync();
+            await Categories.init(sequelize, Sequelize).sync();
+            await AuditLogs.init(sequelize, Sequelize).sync();
+            console.log("All tables are created/altered");
+        } catch (err) {
+            console.error("Table creation error", err);
+        }
 
     }
 
