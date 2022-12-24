@@ -129,10 +129,13 @@ router.post("/register", async (req, res) => {
       first_name: data.first_name,
       last_name: data.last_name,
       phone_number: data.phone_number || "",
-      is_active: true
+      is_active: true,
+      is_super_admin: true
     });
 
     await user.save();
+
+    delete data.password;
 
     res.status(Enum.HTTP_CODES.OK).json(new Response().generateResponse(data));
 
@@ -202,9 +205,9 @@ router.post("/update", auth.authenticate(), auth.checkRole("user_update"), async
   let updates = {};
   try {
 
-    check.areThereEmptyFields(data, "_id");
+    check.areThereEmptyFields(data, "id");
 
-    let user = await User.findOne({ where: { _id: data._id } });
+    let user = await User.findOne({ where: { _id: data.id } });
     if (user) {
 
       if (!check.isEmpty(data.password) && data.password.length < 8)
@@ -229,22 +232,24 @@ router.post("/update", auth.authenticate(), auth.checkRole("user_update"), async
         let userRoles = await UserRoles.findAll({ where: { user_id: user._id } });
 
         let role_ids = userRoles.map(x => x._id);
+        if (role_ids.length > 0) {
+          let removedRoleIds = role_ids.filter(x => !data.role_ids.includes(x));
+          let newRoleIds = data.role_ids.filter(x => !role_ids.includes(x));
 
-        let removedRoleIds = role_ids.filter(x => !data.role_ids.includes(x));
-        let newRoleIds = data.role_ids.filter(x => !role_ids.includes(x));
+          if (removedRoleIds.length > 0)
+            await UserRoles.remove({ _id: { $in: removedRoleIds } });
 
-        if (removedRoleIds.length > 0)
-          await UserRoles.remove({ _id: { $in: removedRoleIds } });
+          for (let i = 0; i < newRoleIds.length; i++) {
+            let role_id = newRoleIds[i];
+            let userRole = new UserRoles({
+              role_id,
+              user_id: user._id,
+              created_by: req.user.id
+            });
 
-        for (let i = 0; i < newRoleIds.length; i++) {
-          let role_id = newRoleIds[i];
-          let userRole = new UserRoles({
-            role_id,
-            user_id: user._id,
-            created_by: req.user.id
-          });
+            await userRole.save();
 
-          await userRole.save();
+          }
 
         }
 
@@ -289,12 +294,15 @@ router.post("/delete", auth.authenticate(), auth.checkRole("user_delete"), async
 
     let user = await User.findOne({ where: { _id: data.id } });
 
-    await UserRoles.remove({ user_id: data.id })
-    await User.remove({ _id: data.id })
+    if (user) {
+      await UserRoles.remove({ user_id: data.id })
+      await User.remove({ _id: data.id })
 
-    auditLogs.info(req.user.email, "User", "Delete", `${user.email} ${i18n.LOGS.USER_DELETE}`);
+      auditLogs.info(req.user.email, "User", "Delete", `${user.email} ${i18n.LOGS.USER_DELETE}`);
+    }
 
-    res.status(Enum.HTTP_CODES.OK).json({ success: true });
+    return res.status(Enum.HTTP_CODES.OK).json({ success: true });
+
   } catch (err) {
     let response = new Response().generateError(err);
     res.status(response.code)
