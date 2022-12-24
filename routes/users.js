@@ -119,6 +119,7 @@ router.post("/register", async (req, res) => {
 
     let superAdminRole = await Roles.findOne({ where: { role_name: "SUPER_ADMIN" } });
 
+    
     if (superAdminRole && superAdminRole._id) {
       return res.sendStatus(Enum.HTTP_CODES.NOT_FOUND);
     }
