@@ -1,2 +1,2 @@
-# express-angular-project-base
-An Angular &amp; ExpressJS project base
+# project-base
+It's a project base that is written in Node.js(Express).
