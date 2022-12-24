@@ -39,7 +39,6 @@ module.exports = function () {
                     first_name: user.first_name,
                     last_name: user.last_name,
                     roles: privileges,
-                    is_super_admin: user.is_super_admin,
                     exp: parseInt(Date.now() / 1000) + config.TOKEN_EXPIRE_TIME
                 });
 
@@ -62,20 +61,16 @@ module.exports = function () {
         },
         checkRole: (...expectedRoles) => {
             return (req, res, next) => {
-                if (req.user.is_super_admin) { // SUPER USER
+                let i = 0;
+                var privileges = req.user.roles.map(x => x.privilege).map(x => x.Key);
+
+
+                while (i < expectedRoles.length && !privileges.includes(expectedRoles[i])) i++;
+                if (i < expectedRoles.length) {
                     return next();
                 } else {
-                    let i = 0;
-                    var privileges = req.user.roles.map(x => x.privilege).map(x => x.Key);
-
-
-                    while (i < expectedRoles.length && !privileges.includes(expectedRoles[i])) i++;
-                    if (i < expectedRoles.length) {
-                        return next();
-                    } else {
-                        let response = new Response().generateError(new Error(Enum.HTTP_CODES.FORBIDDEN, i18n.AUTH.NEED_PERMISSION_TITLE, i18n.AUTH.NEED_PERMISSION_INFO));
-                        return res.status(response.code).json(response);
-                    }
+                    let response = new Response().generateError(new Error(Enum.HTTP_CODES.FORBIDDEN, i18n.AUTH.NEED_PERMISSION_TITLE, i18n.AUTH.NEED_PERMISSION_INFO));
+                    return res.status(response.code).json(response);
                 }
             }
         }

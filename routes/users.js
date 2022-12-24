@@ -117,23 +117,53 @@ router.post("/register", async (req, res) => {
       throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, i18n.USERS.VALIDATION_ERROR_TITLE, i18n.USERS.VALIDATION_ERROR_INFO);
     data.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(8), null);
 
-    let superUsers = await User.findAll({ where: { is_super_admin: true } });
+    let superAdminRole = await Roles.findOne({ where: { role_name: "SUPER_ADMIN" } });
 
-    if (superUsers.length > 0) {
+    if (superAdminRole && superAdminRole._id) {
       return res.sendStatus(Enum.HTTP_CODES.NOT_FOUND);
     }
 
+
+    // Create a user
     let user = new User({
       email: data.email,
       password: data.password,
       first_name: data.first_name,
       last_name: data.last_name,
       phone_number: data.phone_number || "",
-      is_active: true,
-      is_super_admin: true
+      is_active: true
     });
 
     await user.save();
+
+    // Create a SUPER_ADMIN role
+    let role = new Roles({
+      role_name: "SUPER_ADMIN",
+      is_active: true,
+      created_by: user._id
+    });
+
+    await role.save();
+
+    // Create Role Privileges
+    for (let i = 0; i < Enum.Privileges.length; i++) {
+      let priv = new RolePrivileges({
+        role_id: role._id,
+        permission: Enum.Privileges[i].Key,
+        created_by: user._id
+      })
+
+      await priv.save();
+    }
+
+    // Bind user and role
+    let userRole = new UserRoles({
+      role_id: role._id,
+      user_id: user._id,
+      created_by: user._id
+    });
+
+    await userRole.save();
 
     delete data.password;
 
@@ -225,7 +255,7 @@ router.post("/update", auth.authenticate(), auth.checkRole("user_update"), async
         updates.language = data.language;
       }
 
-      if (!check.isEmpty(data.role_ids) && data.role_ids.length == 0 && !user.is_super_admin)
+      if (!check.isEmpty(data.role_ids) && data.role_ids.length == 0)
         throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, i18n.USERS.VALIDATION_ERROR_TITLE, i18n.USERS.ROLE_MUST_ERROR);
       else {
 

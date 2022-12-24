@@ -26,8 +26,7 @@ class Users extends Sequelize.Model {
                 phone_number: { type: DataTypes.STRING },
                 created_by: { type: DataTypes.UUID },
                 updated_by: { type: DataTypes.UUID },
-                language: { type: DataTypes.STRING, defaultValue: "en" },
-                is_super_admin: { type: DataTypes.BOOLEAN, defaultValue: false }
+                language: { type: DataTypes.STRING, defaultValue: "en" }
             },
             {
                 indexes: [
