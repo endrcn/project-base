@@ -36,17 +36,17 @@ router.post('/add', auth.checkRole("category_add"), async (req, res) => {
 
     let body = req.body;
 
-    check.areThereEmptyFields(body, "title");
+    check.areThereEmptyFields(body, "name");
 
     let category = new Categories({
-      title: body.title,
+      name: body.name,
       created_by: req.user.id,
       is_active: true
     })
 
     await category.save();
 
-    auditLogs.info(req.user.email, "Category", "Add", `${category.title} ${i18n.LOGS.CATEGORY_ADD}`);
+    auditLogs.info(req.user.email, "Category", "Add", `${category.name} ${i18n.LOGS.CATEGORY_ADD}`);
 
     return res.status(Enum.HTTP_CODES.CREATED).json(new Response().generateResponse({ success: true }))
   } catch (err) {
@@ -64,7 +64,7 @@ router.post('/update', auth.checkRole("category_update"), async (req, res) => {
 
     check.areThereEmptyFields(body, "id");
 
-    if (body.title) updates.title = body.title;
+    if (body.name) updates.name = body.name;
     if (typeof body.is_active === "boolean") updates.is_active = body.is_active;
 
     updates.updated_by = req.user.id;
@@ -73,7 +73,7 @@ router.post('/update', auth.checkRole("category_update"), async (req, res) => {
 
     let updated = (await Categories.findAll({ where: { _id: body.id } }) || [])[0] || {};
 
-    auditLogs.info(req.user.email, "Category", "Update", `${updated.title} ${i18n.LOGS.CATEGORY_UPDATE}`);
+    auditLogs.info(req.user.email, "Category", "Update", `${updated.name} ${i18n.LOGS.CATEGORY_UPDATE}`);
 
     res.json(new Response().generateResponse(updated));
   } catch (err) {
@@ -93,7 +93,7 @@ router.post('/delete', auth.checkRole("category_delete"), async (req, res) => {
 
     await Categories.remove({ _id: body.id });
 
-    auditLogs.info(req.user.email, "Category", "Delete", `${category.title} ${i18n.LOGS.CATEGORY_DELETE}`);
+    auditLogs.info(req.user.email, "Category", "Delete", `${category.name} ${i18n.LOGS.CATEGORY_DELETE}`);
 
     return res.status(Enum.HTTP_CODES.OK).json(new Response().generateResponse({ success: true }))
   } catch (err) {

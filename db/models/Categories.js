@@ -14,7 +14,7 @@ class Categories extends Sequelize.Model {
         Categories.db = super.init(
             {
                 _id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
-                title: { type: DataTypes.STRING, allowNull: false },
+                name: { type: DataTypes.STRING, allowNull: false },
                 created_by: { type: DataTypes.UUID, allowNull: false },
                 updated_by: { type: DataTypes.UUID },
                 is_active: { type: DataTypes.BOOLEAN, defaultValue: true }
