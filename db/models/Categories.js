@@ -17,8 +17,6 @@ class Categories extends Sequelize.Model {
                 title: { type: DataTypes.STRING, allowNull: false },
                 created_by: { type: DataTypes.UUID, allowNull: false },
                 updated_by: { type: DataTypes.UUID },
-                type: { type: DataTypes.INTEGER, allowNull: false },
-                select_brokerage: { type: DataTypes.BOOLEAN, defaultValue: false },
                 is_active: { type: DataTypes.BOOLEAN, defaultValue: true }
             },
             {

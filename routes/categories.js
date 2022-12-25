@@ -1,5 +1,4 @@
 var express = require('express');
-const fs = require("fs");
 const Enum = require('../config/Enum');
 var router = express.Router();
 
@@ -32,36 +31,6 @@ router.post('/', auth.checkRole("category_view"), async (req, res) => {
   }
 });
 
-router.post('/brokerages', auth.checkRole("category_view"), async (req, res) => {
-  try {
-
-    let body = req.body;
-    let query = {};
-
-    if (typeof body.is_active === "boolean") query.is_active = body.is_active;
-
-    fs.readFile("./data/brokerage_firms.json", "UTF-8", (err, data) => {
-      try {
-        if (err) {
-          console.error(err);
-        } else {
-          data = JSON.parse(data);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-
-      return res.json(new Response().generateResponse(data));
-
-    })
-
-  } catch (err) {
-    let response = new Response().generateError(err);
-    res.status(response.code)
-      .json(response);
-  }
-});
-
 router.post('/add', auth.checkRole("category_add"), async (req, res) => {
   try {
 
@@ -71,8 +40,6 @@ router.post('/add', auth.checkRole("category_add"), async (req, res) => {
 
     let category = new Categories({
       title: body.title,
-      type: body.type,
-      select_brokerage: body.select_brokerage,
       created_by: req.user.id,
       is_active: true
     })
@@ -95,20 +62,16 @@ router.post('/update', auth.checkRole("category_update"), async (req, res) => {
     let body = req.body;
     let updates = {};
 
-    check.areThereEmptyFields(body, "_id");
+    check.areThereEmptyFields(body, "id");
 
     if (body.title) updates.title = body.title;
     if (typeof body.is_active === "boolean") updates.is_active = body.is_active;
-    if (typeof body.select_brokerage === "boolean") updates.select_brokerage = body.select_brokerage;
-    if (check.isNumeric(body.type)) updates.type = body.type;
-
-    if (body.type == Enum.CATEGORY_TYPES.FILE_ARCHIVE) updates.select_brokerage = false;
 
     updates.updated_by = req.user.id;
 
-    await Categories.update(updates, { where: { _id: body._id } });
+    await Categories.update(updates, { where: { _id: body.id } });
 
-    let updated = (await Categories.findAll({ where: { _id: body._id } }) || [])[0] || {};
+    let updated = (await Categories.findAll({ where: { _id: body.id } }) || [])[0] || {};
 
     auditLogs.info(req.user.email, "Category", "Update", `${updated.title} ${i18n.LOGS.CATEGORY_UPDATE}`);
 
