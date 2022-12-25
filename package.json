@@ -26,7 +26,7 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.0",
     "sequelize": "^6.25.3",
-    "tedious": "^15.1.0",
+    "tedious": "^11.0.8",
     "uuid": "^9.0.0",
     "winston": "^3.8.2",
     "winston-daily-rotate-file": "^4.7.1"
