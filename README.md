@@ -16,4 +16,4 @@ It's a project base that is written in Node.js(Express). The aim of this project
 
 ## License
 
-Open sourced under the [MIT license](LICENSE).
+No License. Be comfortable while using it.
