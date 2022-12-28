@@ -6,6 +6,10 @@ It's a project base that is written in Node.js(Express). The aim of this project
 
 - [ ] Postman Collection and documentation will be prepared
 - [ ] TFA will be added.
+- [ ] MongoDB Database Models will be added.
+- [ ] SQL Indexing & column adder will be automated.
+- [ ] HTTPS option will be added.
+- [ ] Security Checks & Updates.
 
 ## Author
 
