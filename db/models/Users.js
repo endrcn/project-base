@@ -4,6 +4,7 @@ const is = require("is_js");
 const { v4: uuid } = require("uuid");
 
 const Enum = require("../../config/Enum");
+const Error = require("../../lib/Error");
 
 
 class Users extends Sequelize.Model {
@@ -58,7 +59,7 @@ class Users extends Sequelize.Model {
  */
     static validateFieldsBeforeAuth(email, password) {
         if (typeof password !== "string" || password.length < Enum.PASS_LENGTH || is.not.email(email))
-            throw new Error(Enum.HTTP_CODES.UNAUTHORIZED, "Validation Failed", "Username or password is wrong!");
+            throw new Error(Enum.HTTP_CODES.UNAUTHORIZED, "Validation Failed", "Email or password is wrong!");
 
         return null;
     }
