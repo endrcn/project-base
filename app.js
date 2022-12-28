@@ -4,7 +4,6 @@ var path = require('path');
 var logger = require('morgan');
 const compression = require('compression');
 const cors = require("cors");
-const fs = require("fs");
 
 var app = express();
 
