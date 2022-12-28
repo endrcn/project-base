@@ -194,6 +194,11 @@ router.post("/add", auth.authenticate(), auth.checkRole("user_add"), async (req,
       throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, i18n.USERS.VALIDATION_ERROR_TITLE, i18n.USERS.EMAIL_VALIDATION_ERROR);
 
     data.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(8), null);
+
+    let roles = await Roles.findAll({ where: { _id: { $in: data.role_ids } } });
+
+    if (roles.length != data.role_ids) throw new Error(Enum.HTTP_CODES.NOT_FOUND, i18n.COMMON.VALIDATION_ERROR_TITLE, i18n.COMMON.VALIDATION_ERROR_INFO);
+
     let user = new User({
       email: data.email,
       password: data.password,
