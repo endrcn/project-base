@@ -4,6 +4,8 @@ const Enum = require("../config/Enum");
 
 const emitter = new (require("../lib/Emitter"))();
 
+emitter.addEmitter("events");
+
 const headers = {
   "Content-Type": "text/event-stream",
   "Connection": "keep-alive",
