@@ -1,0 +1,1439 @@
+{
+	"info": {
+		"_postman_id": "83633671-7c3b-4951-a358-f9246475688a",
+		"name": "PROJECT-BASE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3458795"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "User Auth",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var json = pm.response.json();",
+									"",
+									"pm.environment.set('USER_TOKEN', json.data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@projectbase.com\",\n    \"password\": \"12345678Ab\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/users/auth",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"auth"
+							]
+						},
+						"description": "User Authentication endpoint"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"admin@projectbase.com\",\n    \"password\": \"12345678Ab\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/users/auth",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"auth"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"8f5-Vq/b/vmSjOzCEOfq7ynhcFmm0Vk\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "gzip"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 25 Dec 2022 19:53:21 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": {\n        \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6Ijg0NjJiODM4LTU2ZGYtNDVmZS1iNGE5LTc0ZDViMTk0ZjMxMSIsImV4cCI6MTY3MjA4NDQwMX0.P45450GC32mLf7eoOmAIllmaF52YhDeaIUt110zvTlE\",\n        \"user\": {\n            \"_id\": \"8462b838-56df-45fe-b4a9-74d5b194f311\",\n            \"first_name\": \"Ender\",\n            \"last_name\": \"CAN\",\n            \"roles\": [\n                {\n                    \"_id\": \"911bd24b-ea1f-4b36-b190-d40687ea396a\",\n                    \"role_name\": \"SUPER_ADMIN\",\n                    \"description\": null,\n                    \"is_active\": true,\n                    \"created_by\": \"8462b838-56df-45fe-b4a9-74d5b194f311\",\n                    \"updated_by\": null,\n                    \"createdAt\": \"2022-12-24T20:52:50.348Z\",\n                    \"updatedAt\": \"2022-12-24T20:52:50.348Z\",\n                    \"privilege\": [\n                        {\n                            \"Key\": \"category_view\",\n                            \"Name\": \"View\",\n                            \"Group\": \"Category\",\n                            \"Description\": \"Category Permissions\",\n                            \"type\": \"system\"\n                        },\n                        {\n                            \"Key\": \"role_delete\",\n                            \"Name\": \"Delete\",\n                            \"Group\": \"Role\",\n                            \"Description\": \"Role Permissions\",\n                            \"type\": \"system\",\n                            \"dependencies\": {\n                                \"and\": [\n                                    \"role_view\"\n                                ]\n                            }\n                        },\n                        {\n                            \"Key\": \"role_view\",\n                            \"Name\": \"View\",\n                            \"Group\": \"Role\",\n                            \"Description\": \"Role Permissions\",\n                            \"type\": \"system\"\n                        },\n                        {\n                            \"Key\": \"user_view\",\n                            \"Name\": \"View\",\n                            \"Group\": \"User\",\n                            \"Description\": \"User Permissions\",\n                            \"type\": \"system\"\n                        },\n                        {\n                            \"Key\": \"role_update\",\n                            \"Name\": \"Update\",\n                            \"Group\": \"Role\",\n                            \"Description\": \"Role Permissions\",\n                            \"type\": \"system\",\n                            \"dependencies\": {\n                                \"and\": [\n                                    \"role_view\"\n                                ]\n                            }\n                        },\n                        {\n                            \"Key\": \"user_add\",\n                            \"Name\": \"Add\",\n                            \"Group\": \"User\",\n                            \"Description\": \"User Permissions\",\n                            \"type\": \"system\",\n                            \"dependencies\": {\n                                \"and\": [\n                                    \"user_view\",\n                                    \"role_view\"\n                                ]\n                            }\n                        },\n                        {\n                            \"Key\": \"category_delete\",\n                            \"Name\": \"Delete\",\n                            \"Group\": \"Category\",\n                            \"Description\": \"Category Permissions\",\n                            \"type\": \"system\",\n                            \"dependencies\": {\n                                \"and\": [\n                                    \"category_view\"\n                                ]\n                            }\n                        },\n                        {\n                            \"Key\": \"user_update\",\n                            \"Name\": \"Update\",\n                            \"Group\": \"User\",\n                            \"Description\": \"User Permissions\",\n                            \"type\": \"system\",\n                            \"dependencies\": {\n                                \"and\": [\n                                    \"user_view\",\n                                    \"role_view\"\n                                ]\n                            }\n                        },\n                        {\n                            \"Key\": \"category_update\",\n                            \"Name\": \"Update\",\n                            \"Group\": \"Category\",\n                            \"Description\": \"Category Permissions\",\n                            \"type\": \"system\",\n                            \"dependencies\": {\n                                \"and\": [\n                                    \"category_view\"\n                                ]\n                            }\n                        },\n                        {\n                            \"Key\": \"category_add\",\n                            \"Name\": \"Add\",\n                            \"Group\": \"Category\",\n                            \"Description\": \"Category Permissions\",\n                            \"type\": \"system\",\n                            \"dependencies\": {\n                                \"and\": [\n                                    \"category_view\"\n                                ]\n                            }\n                        },\n                        {\n                            \"Key\": \"user_delete\",\n                            \"Name\": \"Delete\",\n                            \"Group\": \"User\",\n                            \"Description\": \"User Permissions\",\n                            \"type\": \"system\",\n                            \"dependencies\": {\n                                \"and\": [\n                                    \"user_view\"\n                                ]\n                            }\n                        },\n                        {\n                            \"Key\": \"auditlog_view\",\n                            \"Name\": \"View\",\n                            \"Group\": \"AuditLogs\",\n                            \"Description\": \"AuditLogs Permissions\",\n                            \"type\": \"system\"\n                        },\n                        {\n                            \"Key\": \"role_add\",\n                            \"Name\": \"Add\",\n                            \"Group\": \"Role\",\n                            \"Description\": \"Role Permissions\",\n                            \"type\": \"system\",\n                            \"dependencies\": {\n                                \"and\": [\n                                    \"role_view\"\n                                ]\n                            }\n                        }\n                    ]\n                }\n            ]\n        }\n    }\n}"
+						},
+						{
+							"name": "Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"admin@projectbase.com\",\n    \"password\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/users/auth",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"auth"
+									]
+								}
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "96"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"60-ygZbiE+CtfIw/hfpUWCK99v3oYw\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 25 Dec 2022 19:57:39 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 401,\n    \"error\": {\n        \"message\": \"Validation Failed\",\n        \"description\": \"Email or password is wrong!\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Add Super User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"admin@projectbase.com\",\n    \"password\": \"12345678Ab\",\n    \"first_name\": \"Ender\",\n    \"last_name\": \"CAN\",\n    \"phone_number\": \"905555555555\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/users/register",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"register"
+							]
+						},
+						"description": "This endpoint adds a super admin to the application. This endpoint responds 404 when a super admin is already defined."
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"admin@projectbase.com\",\n    \"password\": \"12345678Ab\",\n    \"first_name\": \"Ender\",\n    \"last_name\": \"CAN\",\n    \"phone_number\": \"905555555555\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/users/register",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "122"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"7a-ZB8ALIgW9qB8qroubqvVkTWb78k\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 25 Dec 2022 20:09:07 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": {\n        \"email\": \"admin@projectbase.com\",\n        \"first_name\": \"Ender\",\n        \"last_name\": \"CAN\",\n        \"phone_number\": \"905555555555\"\n    }\n}"
+						},
+						{
+							"name": "Not Found",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"admin@projectbase.com\",\n    \"password\": \"12345678Ab\",\n    \"first_name\": \"Ender\",\n    \"last_name\": \"CAN\",\n    \"phone_number\": \"905555555555\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/users/register",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"register"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "plain",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "text/plain; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "9"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"9-0gXL1ngzMqISxa6S1zx3F4wtLyg\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 25 Dec 2022 20:02:25 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "Not Found"
+						}
+					]
+				},
+				{
+					"name": "Add",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"user1@projectbase.com\",\n    \"password\": \"12345678Ab\",\n    \"first_name\": \"User\",\n    \"last_name\": \"One\",\n    \"phone_number\": \"905555555555\",\n    \"role_ids\": [\n        \"e12f6559-c861-45ef-8457-725a49349e3b\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/users/add",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"add"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Unprocessable Entity Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"user1@projectbase.com\",\n    \"password\": \"12345678Ab\",\n    \"first_name\": \"User\",\n    \"last_name\": \"One\",\n    \"phone_number\": \"905555555555\",\n    \"role_ids\": []\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/users/add",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"add"
+									]
+								}
+							},
+							"status": "Unprocessable Entity",
+							"code": 422,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "74"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"4a-7WDFRCzeORUjUR2nHY+Hm0krYX4\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 25 Dec 2022 20:20:56 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 422,\n    \"error\": {\n        \"description\": \"At least one role must be selected.\"\n    }\n}"
+						},
+						{
+							"name": "Validation Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"user4@projectbase.com\",\n    \"password\": \"12345678Ab\",\n    \"first_name\": \"User\",\n    \"last_name\": \"One\",\n    \"phone_number\": \"905555555555\",\n    \"role_ids\": [\n        \"e12f6559-c861-45ef-8457-725a49349e3b\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/users/add",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"add"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "74"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"4a-gbwozWBaOiDT4jG7gcQqBht5m74\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 Dec 2022 20:51:26 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 404,\n    \"error\": {\n        \"message\": \"Error!\",\n        \"description\": \"Validation Error\"\n    }\n}"
+						},
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\": \"user5@projectbase.com\",\n    \"password\": \"12345678Ab\",\n    \"first_name\": \"User\",\n    \"last_name\": \"One\",\n    \"phone_number\": \"905555555555\",\n    \"role_ids\": [\n        \"e12f6559-c861-45ef-8457-725a49349e3b\"\n    ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/users/add",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"add"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "36"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"24-ZlYYpjvZGFyaRNq1kMc+dhaJ0FQ\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 Dec 2022 20:53:19 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": {\n        \"success\": true\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"9d212b8f-2593-49ee-b619-5abc2bbbcaea\",\n    \"first_name\": \"System\",\n    \"last_name\": \"Admin\",\n    \"phone_number\": \"905555555555\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/users/update",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"update"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"1b6cbc7d-56ec-4146-b26d-e79c04e5d518\",\n    \"first_name\": \"System\",\n    \"last_name\": \"Admin\",\n    \"phone_number\": \"905555555555\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/users/update",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"update"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "351"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"15f-WhNdkXQaueonqj7uv+UB4E+gwr0\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 Dec 2022 21:50:15 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": {\n        \"_id\": \"1b6cbc7d-56ec-4146-b26d-e79c04e5d518\",\n        \"email\": \"admin@projectbase.com\",\n        \"is_active\": true,\n        \"first_name\": \"System\",\n        \"last_name\": \"Admin\",\n        \"phone_number\": \"905555555555\",\n        \"created_by\": null,\n        \"updated_by\": \"1b6cbc7d-56ec-4146-b26d-e79c04e5d518\",\n        \"language\": \"en\",\n        \"createdAt\": \"2022-12-25T20:09:07.475Z\",\n        \"updatedAt\": \"2022-12-30T21:50:15.781Z\"\n    }\n}"
+						},
+						{
+							"name": "Not Found",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"9d212b8f-2593-49ee-b619-5abc2bbbcaea\",\n    \"first_name\": \"System\",\n    \"last_name\": \"Admin\",\n    \"phone_number\": \"905555555555\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/users/update",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"update"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "80"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"50-tQ0euUIVaI+63D3Bt/mSpzku6zw\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 Dec 2022 21:46:23 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 404,\n    \"error\": {\n        \"message\": \"User Not Found\",\n        \"description\": \"User Not Found\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"search\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/users",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"search\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/users",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "368"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"170-llDTHs+8yUXyZlwpEpz8+2x71mY\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 25 Dec 2022 20:06:35 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 200,\n    \"data\": [\n        {\n            \"_id\": \"8462b838-56df-45fe-b4a9-74d5b194f311\",\n            \"email\": \"admin@projectbase.com\",\n            \"is_active\": true,\n            \"first_name\": \"Ender\",\n            \"last_name\": \"CAN\",\n            \"phone_number\": \"905555555555\",\n            \"created_by\": null,\n            \"updated_by\": null,\n            \"language\": \"en\",\n            \"createdAt\": \"2022-12-24T20:52:50.328Z\",\n            \"updatedAt\": \"2022-12-24T20:52:50.328Z\",\n            \"role_ids\": [\n                \"911bd24b-ea1f-4b36-b190-d40687ea396a\"\n            ]\n        }\n    ]\n}"
+						},
+						{
+							"name": "Permission Error",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"search\": \"\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/users",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"status": "Forbidden",
+							"code": 403,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "87"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"57-N0fUNhxIHYjjsPBoKZIU9M+3AU8\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 25 Dec 2022 20:07:18 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"code\": 403,\n    \"error\": {\n        \"message\": \"Need Permission\",\n        \"description\": \"You need permission.\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"8462b838-56df-45fe-b4a9-74d5b194f311\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/users/delete",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"delete"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\": \"6ac9c9ac-ce4b-4768-9b02-3ec7a43c2745\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{URL}}/api/users/delete",
+									"host": [
+										"{{URL}}"
+									],
+									"path": [
+										"api",
+										"users",
+										"delete"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"10-oV4hJxRVSENxc/wX8+mA4/Pe4tA\""
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 30 Dec 2022 21:52:04 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Roles",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"search\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/roles",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"roles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"role_name\": \"ADMIN\",\n    \"description\": \"Admin\",\n    \"permissions\": [\n        \"user_view\",\n        \"user_add\",\n        \"user_update\",\n        \"user_delete\",\n        \"role_view\",\n        \"role_add\",\n        \"role_update\",\n        \"role_delete\",\n        \"category_view\",\n        \"category_add\",\n        \"category_update\",\n        \"category_delete\",\n        \"auditlog_view\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/roles/add",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"24d62308-e256-457e-96a1-9617a58be740\",\n    \"role_name\": \"Admin1\",\n    \"description\": \"Desc1\",\n    \"is_active\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/roles/update",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"24d62308-e256-457e-96a1-9617a58be740\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/roles/delete",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"roles",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "AuditLogs",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"begin_date\": \"2022-12-01\",\n    \"end_date\": \"2022-12-30\",\n    \"search\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/auditlogs",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"auditlogs"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "List",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"search\": \"\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/categories",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Category 1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/categories/add",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"b8ed603d-db8d-4ea8-8bb8-da59dd519790\",\n    \"name\": \"Cat 1\",\n    \"is_active\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/categories/update",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{USER_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"4ead423e-e6d3-44cb-a6e3-71298788238b\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/api/categories/delete",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
