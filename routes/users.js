@@ -111,11 +111,11 @@ router.post("/auth", async (req, res) => {
  * }
  */
 router.post("/register", async (req, res) => {
-  let data = req.body;
+  let body = req.body;
   try {
-    if (!data || typeof data !== "object")
+    if (!body || typeof body !== "object")
       throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, i18n.USERS.VALIDATION_ERROR_TITLE, i18n.USERS.VALIDATION_ERROR_INFO);
-    data.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(8), null);
+    body.password = bcrypt.hashSync(body.password, bcrypt.genSaltSync(8), null);
 
     let superAdminRole = await Roles.findOne({ where: { role_name: "SUPER_ADMIN" } });
 
@@ -126,11 +126,11 @@ router.post("/register", async (req, res) => {
 
     // Create a user
     let user = new User({
-      email: data.email,
-      password: data.password,
-      first_name: data.first_name,
-      last_name: data.last_name,
-      phone_number: data.phone_number || "",
+      email: body.email,
+      password: body.password,
+      first_name: body.first_name,
+      last_name: body.last_name,
+      phone_number: body.phone_number || "",
       is_active: true
     });
 
@@ -165,9 +165,9 @@ router.post("/register", async (req, res) => {
 
     await userRole.save();
 
-    delete data.password;
+    delete body.password;
 
-    res.status(Enum.HTTP_CODES.OK).json(new Response().generateResponse(data));
+    res.status(Enum.HTTP_CODES.OK).json(new Response().generateResponse(body));
 
   } catch (err) {
     let response = new Response().generateError(err);
@@ -178,42 +178,42 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/add", auth.authenticate(), auth.checkRole("user_add"), async (req, res) => {
-  let data = req.body;
+  let body = req.body;
 
   try {
 
-    check.areThereEmptyFields(data, "email", "password", "first_name", "last_name", "role_ids");
+    check.areThereEmptyFields(body, "email", "password", "first_name", "last_name", "role_ids");
 
-    if ((!Array.isArray(data.role_ids) || data.role_ids.length == 0))
+    if ((!Array.isArray(body.role_ids) || body.role_ids.length == 0))
       throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, i18n.USERS.VALIDATION_ERROR_TITLE, i18n.USERS.ROLE_MUST_ERROR);
 
-    if (data.password.length < 8)
+    if (body.password.length < 8)
       throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, i18n.USERS.VALIDATION_ERROR_TITLE, i18n.USERS.PASSWORD_LENGTH_ERROR);
     var re = /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))\s*?/;
-    if (!re.test(String(data.email).toLowerCase()))
+    if (!re.test(String(body.email).toLowerCase()))
       throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, i18n.USERS.VALIDATION_ERROR_TITLE, i18n.USERS.EMAIL_VALIDATION_ERROR);
 
-    data.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(8), null);
+    body.password = bcrypt.hashSync(body.password, bcrypt.genSaltSync(8), null);
 
-    let roles = await Roles.findAll({ where: { _id: { $in: data.role_ids } } });
+    let roles = await Roles.findAll({ where: { _id: { $in: body.role_ids } } });
 
-    if (roles.length != data.role_ids) throw new Error(Enum.HTTP_CODES.NOT_FOUND, i18n.COMMON.VALIDATION_ERROR_TITLE, i18n.COMMON.VALIDATION_ERROR_INFO);
+    if (roles.length != body.role_ids.length) throw new Error(Enum.HTTP_CODES.NOT_FOUND, i18n.COMMON.VALIDATION_ERROR_TITLE, i18n.COMMON.VALIDATION_ERROR_INFO);
 
     let user = new User({
-      email: data.email,
-      password: data.password,
-      first_name: data.first_name,
-      last_name: data.last_name,
-      phone_number: data.phone_number || "",
+      email: body.email,
+      password: body.password,
+      first_name: body.first_name,
+      last_name: body.last_name,
+      phone_number: body.phone_number || "",
       is_active: true,
       created_by: req.user.id,
-      language: Enum.LANG[data.language] || "en"
+      language: Enum.LANG[body.language] || "en"
     });
 
     await user.save();
 
-    for (let i = 0; i < data.role_ids.length; i++) {
-      let role_id = data.role_ids[i];
+    for (let i = 0; i < body.role_ids.length; i++) {
+      let role_id = body.role_ids[i];
       let userRole = new UserRoles({
         role_id,
         user_id: user._id,
@@ -236,40 +236,38 @@ router.post("/add", auth.authenticate(), auth.checkRole("user_add"), async (req,
 });
 
 router.post("/update", auth.authenticate(), auth.checkRole("user_update"), async (req, res) => {
-  let data = req.body;
+  let body = req.body;
   let updates = {};
   try {
 
-    check.areThereEmptyFields(data, "id");
+    check.areThereEmptyFields(body, "id");
 
-    let user = await User.findOne({ where: { _id: data.id } });
+    let user = await User.findOne({ where: { _id: body.id } });
     if (user) {
 
-      if (!check.isEmpty(data.password) && data.password.length < 8)
+      if (!check.isEmpty(body.password) && body.password.length < 8)
         throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, i18n.USERS.VALIDATION_ERROR_TITLE, i18n.USERS.PASSWORD_LENGTH_ERROR);
 
       //gelen kullanıcının passwordu db deki passworde eşit değilse kullanıcı password guncelliyor.
-      if (!check.isEmpty(data.password) && !bcrypt.compareSync(data.password, user.password)) {
+      if (!check.isEmpty(body.password) && !bcrypt.compareSync(body.password, user.password)) {
 
-        updates.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(8), null);
-      } else if (!check.isEmpty(data.password)) {
-        updates.password = bcrypt.hashSync(data.password, bcrypt.genSaltSync(8), null);
+        updates.password = bcrypt.hashSync(body.password, bcrypt.genSaltSync(8), null);
+      } else if (!check.isEmpty(body.password)) {
+        updates.password = bcrypt.hashSync(body.password, bcrypt.genSaltSync(8), null);
       }
 
-      if (data.language && Enum.LANG[data.language]) {
-        updates.language = data.language;
+      if (body.language && Enum.LANG[body.language]) {
+        updates.language = body.language;
       }
 
-      if (!check.isEmpty(data.role_ids) && data.role_ids.length == 0)
-        throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, i18n.USERS.VALIDATION_ERROR_TITLE, i18n.USERS.ROLE_MUST_ERROR);
-      else {
+      if (Array.isArray(body.role_ids) && body.role_ids.length > 0) {
 
         let userRoles = await UserRoles.findAll({ where: { user_id: user._id } });
 
         let role_ids = userRoles.map(x => x._id);
         if (role_ids.length > 0) {
-          let removedRoleIds = role_ids.filter(x => !data.role_ids.includes(x));
-          let newRoleIds = data.role_ids.filter(x => !role_ids.includes(x));
+          let removedRoleIds = role_ids.filter(x => !body.role_ids.includes(x));
+          let newRoleIds = body.role_ids.filter(x => !role_ids.includes(x));
 
           if (removedRoleIds.length > 0)
             await UserRoles.remove({ _id: { $in: removedRoleIds } });
@@ -287,13 +285,12 @@ router.post("/update", auth.authenticate(), auth.checkRole("user_update"), async
           }
 
         }
-
       }
 
-      if (data.first_name) updates.first_name = data.first_name;
-      if (data.last_name) updates.last_name = data.last_name;
-      if (data.phone_number) updates.phone_number = data.phone_number;
-      if (typeof data.is_active === "boolean") updates.is_active = data.is_active;
+      if (body.first_name) updates.first_name = body.first_name;
+      if (body.last_name) updates.last_name = body.last_name;
+      if (body.phone_number) updates.phone_number = body.phone_number;
+      if (typeof body.is_active === "boolean") updates.is_active = body.is_active;
 
       updates.updated_by = req.user.id;
 
@@ -321,17 +318,17 @@ router.post("/update", auth.authenticate(), auth.checkRole("user_update"), async
 });
 
 router.post("/delete", auth.authenticate(), auth.checkRole("user_delete"), async (req, res) => {
-  let data = req.body;
+  let body = req.body;
 
   try {
 
-    check.areThereEmptyFields(data, "id");
+    check.areThereEmptyFields(body, "id");
 
-    let user = await User.findOne({ where: { _id: data.id } });
+    let user = await User.findOne({ where: { _id: body.id } });
 
     if (user) {
-      await UserRoles.remove({ user_id: data.id })
-      await User.remove({ _id: data.id })
+      await UserRoles.remove({ user_id: body.id })
+      await User.remove({ _id: body.id })
 
       auditLogs.info(req.user.email, "User", "Delete", `${user.email} ${i18n.LOGS.USER_DELETE}`);
     }
