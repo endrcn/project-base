@@ -4,11 +4,11 @@ It's a project base that is written in Node.js(Express). The aim of this project
 
 ## 🚀 To Do
 
-- [ ] Postman Collection and documentation will be prepared
-- [ ] TFA will be added.
+- [x] Postman Collection and documentation will be prepared
 - [ ] MongoDB Database Models will be added.
 - [ ] SQL Indexing & column adder will be automated.
 - [ ] HTTPS option will be added.
+- [ ] TFA will be added.
 - [ ] Security Checks & Updates.
 
 ## ⚡️ Features
@@ -22,7 +22,7 @@ It's a project base that is written in Node.js(Express). The aim of this project
 - Winston Logger
 - Multi Language Support
 
-## Installation
+## 👨🏽‍💻 Installation
 
 You can run this project in your local with the following steps:
 
