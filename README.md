@@ -36,7 +36,7 @@ You can run this project in your local with the following steps:
 
 3. Set up the environment variables.
 
-    This project use `dotenv` module to get environment variables. So you can create a `.env` file to set the environment variables.
+    This project uses the `dotenv` module to get environment variables. So you can create a `.env` file to set the environment variables.
 
     Here is an example of the .env file.
 
