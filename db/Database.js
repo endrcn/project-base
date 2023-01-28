@@ -1,6 +1,6 @@
 
 /**
- * MongoDB methods are in this class
+ * MSSql methods are in this class
  * This class is created with Singleton Pattern!
  */
 
