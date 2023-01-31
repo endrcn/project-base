@@ -10,6 +10,7 @@ It's a project base that is written in Node.js(Express). The aim of this project
 - [ ] HTTPS option will be added.
 - [ ] TFA will be added.
 - [ ] Security Checks & Updates.
+- [ ] Keycloak Integration
 
 ## ⚡️ Features
 
