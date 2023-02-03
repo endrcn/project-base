@@ -36,6 +36,9 @@ let Enum = {
     privGroups: [
 
         {
+            id: "Dashboard",
+            name: "Dashboard Permissions"
+        }, {
             id: "User",
             name: "User Permissions"
         },
@@ -53,6 +56,13 @@ let Enum = {
         }
     ],
     Privileges: [
+        {
+            Key: "dashboard_view",
+            Name: "View",
+            Group: "Dashboard",
+            Description: "Dashboard Permissions",
+            type: "system"
+        },
         {
             Key: "user_view",
             Name: "View",
