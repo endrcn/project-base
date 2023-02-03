@@ -97,7 +97,7 @@ router.post('/update', auth.checkRole("role_update"), async (req, res) => {
     let body = req.body;
     let updates = {};
 
-    check.areThereEmptyFields(body, "id");
+    check.areThereEmptyFields(body, "_id");
 
     if (body.role_name) updates.role_name = body.role_name;
     if (body.description) updates.description = body.description;
@@ -105,12 +105,12 @@ router.post('/update', auth.checkRole("role_update"), async (req, res) => {
 
     updates.updated_by = req.user.id;
 
-    await Roles.update(updates, { where: { _id: body.id } });
+    await Roles.update(updates, { where: { _id: body._id } });
 
-    let updated = (await Roles.findAll({ where: { _id: body.id } }) || [])[0] || {};
+    let updated = (await Roles.findAll({ where: { _id: body._id } }) || [])[0] || {};
 
     if (Array.isArray(body.permissions) && body.permissions.length > 0) {
-      let permissions = await RolePrivileges.findAll({ where: { role_id: body.id } });
+      let permissions = await RolePrivileges.findAll({ where: { role_id: body._id } });
 
       let removedPermissions = permissions.filter(x => !body.permissions.includes(x.permission)).map(x => x._id);
       let newPermissions = body.permissions.filter(x => !permissions.map(x => x.permission).includes(x));
@@ -121,7 +121,7 @@ router.post('/update', auth.checkRole("role_update"), async (req, res) => {
       for (let i = 0; i < newPermissions.length; i++) {
         let permission = newPermissions[i];
         let userRole = new RolePrivileges({
-          role_id: body.id,
+          role_id: body._id,
           permission,
           created_by: req.user.id
         });
