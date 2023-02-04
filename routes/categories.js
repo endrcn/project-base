@@ -88,10 +88,10 @@ router.post('/delete', auth.checkRole("category_delete"), async (req, res) => {
 
     let body = req.body;
 
-    check.areThereEmptyFields(body, "_id");
-    let category = (await Categories.findAll({ where: { _id: body._id } }) || [])[0] || {};
+    check.areThereEmptyFields(body, "id");
+    let category = (await Categories.findAll({ where: { _id: body.id } }) || [])[0] || {};
 
-    await Categories.remove({ _id: body._id });
+    await Categories.remove({ _id: body.id });
 
     auditLogs.info(req.user.email, "Category", "Delete", `${category.name} ${i18n.LOGS.CATEGORY_DELETE}`);
 
