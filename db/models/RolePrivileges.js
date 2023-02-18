@@ -1,56 +1,19 @@
-const Sequelize = require("sequelize");
-const UserModel = require("./Users")
-const RoleModel = require("./Roles");
-const { v4: uuid } = require("uuid");
+const mongoose = require("mongoose");
 
-class RolePrivileges extends Sequelize.Model {
+const schema = mongoose.Schema({
+    role_id: { type: mongoose.Schema.Types.ObjectId, required: true },
+    permission: { type: String, required: true },
+    created_by: { type: mongoose.Schema.Types.ObjectId, required: true }
+}, {
+    versionKey: false,
+    timestamps: true
+});
 
-    constructor(fields) {
-        super();
-        this.dataValues = fields;
+schema.index({ role_id: 1, permission: 1 }, { unique: true });
 
-    }
-
-    static init(sequelize, DataTypes) {
-        RolePrivileges.db = super.init(
-            {
-                _id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
-                role_id: { type: DataTypes.UUID, allowNull: false },
-                permission: { type: DataTypes.STRING, allowNull: false },
-                created_by: { type: DataTypes.UUID, allowNull: false }
-            },
-            {
-                indexes: [
-                    {
-                        unique: true,
-                        fields: ['role_id', 'permission']
-                    }
-                ],
-                modelName: "RolePrivileges",
-                sequelize
-            }
-        );
-
-        RolePrivileges.belongsTo(UserModel, { foreignKey: "created_by" });
-        RolePrivileges.belongsTo(RoleModel, { foreignKey: "role_id" });
-
-
-        return RolePrivileges.db;
-    }
-
-    async save() {
-
-        if (!this.dataValues._id) {
-            this.dataValues._id = uuid();
-        }
-
-        await super.save();
-    }
-
-    static async remove(query) {
-        await super.destroy({ where: query });
-    }
+class RolePrivileges extends mongoose.Model {
 
 }
 
-module.exports = RolePrivileges.db || RolePrivileges;
+schema.loadClass(RolePrivileges);
+module.exports = mongoose.model("role_privileges", schema, "role_privileges");

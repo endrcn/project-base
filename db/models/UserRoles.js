@@ -1,57 +1,20 @@
-const Sequelize = require("sequelize");
-const UserModel = require("./Users");
-const { v4: uuid } = require("uuid");
-const Roles = require("./Roles");
+const mongoose = require("mongoose");
 
-class UserRoles extends Sequelize.Model {
+const schema = mongoose.Schema({
+    role_id: { type: mongoose.Schema.Types.ObjectId },
+    user_id: { type: mongoose.Schema.Types.ObjectId },
+    created_by: { type: mongoose.Schema.Types.ObjectId, required: true },
+    updated_by: { type: mongoose.Schema.Types.ObjectId }
+}, {
+    versionKey: false,
+    timestamps: true
+});
 
-    constructor(fields) {
-        super();
-        this.dataValues = fields;
+schema.index({ role_id: 1, user_id: 1 }, { unique: true });
 
-    }
-
-    static init(sequelize, DataTypes) {
-        UserRoles.db = super.init(
-            {
-                _id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
-                role_id: { type: DataTypes.UUID },
-                user_id: { type: DataTypes.UUID },
-                created_by: { type: DataTypes.UUID, allowNull: false },
-                updated_by: { type: DataTypes.UUID }
-            },
-            {
-                indexes: [
-                    {
-                        unique: true,
-                        fields: ['role_id', 'user_id']
-                    }
-                ],
-                modelName: "UserRoles",
-                sequelize
-            }
-        );
-
-        UserRoles.belongsTo(UserModel, { foreignKey: "created_by", targetKey: "_id" });
-        UserRoles.belongsTo(UserModel, { foreignKey: "user_id", targetKey: "_id" });
-        UserRoles.belongsTo(Roles, { foreignKey: "role_id", targetKey: "_id" });
-
-        return UserRoles.db;
-    }
-
-    async save() {
-
-        if (!this.dataValues._id) {
-            this.dataValues._id = uuid();
-        }
-
-        await super.save();
-    }
-
-    static async remove(query) {
-        await super.destroy({ where: query });
-    }
+class UserRoles extends mongoose.Model {
 
 }
 
-module.exports = UserRoles.db || UserRoles;
+schema.loadClass(UserRoles);
+module.exports = mongoose.model("user_roles", schema, "user_roles");

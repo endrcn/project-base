@@ -21,7 +21,7 @@ router.post('/', auth.checkRole("category_view"), async (req, res) => {
 
     if (typeof body.is_active === "boolean") query.is_active = body.is_active;
 
-    let categories = await Categories.findAll({ where: query });
+    let categories = await Categories.find(query);
 
     return res.json(new Response().generateResponse(categories));
   } catch (err) {
@@ -69,9 +69,9 @@ router.post('/update', auth.checkRole("category_update"), async (req, res) => {
 
     updates.updated_by = req.user.id;
 
-    await Categories.update(updates, { where: { _id: body._id } });
+    await Categories.update(updates, { _id: body._id });
 
-    let updated = (await Categories.findAll({ where: { _id: body._id } }) || [])[0] || {};
+    let updated = (await Categories.find({ _id: body._id }) || [])[0] || {};
 
     auditLogs.info(req.user.email, "Category", "Update", `${updated.name} ${i18n.LOGS.CATEGORY_UPDATE}`);
 
@@ -89,7 +89,7 @@ router.post('/delete', auth.checkRole("category_delete"), async (req, res) => {
     let body = req.body;
 
     check.areThereEmptyFields(body, "id");
-    let category = (await Categories.findAll({ where: { _id: body.id } }) || [])[0] || {};
+    let category = (await Categories.find({ _id: body.id }) || [])[0] || {};
 
     await Categories.remove({ _id: body.id });
 

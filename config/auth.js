@@ -21,14 +21,14 @@ module.exports = function () {
     let strategy = new Strategy(params, async (payload, done) => {
         try {
 
-            let users = await User.findAll({ where: { _id: payload.id } }) || [];
+            let users = await User.find({ _id: payload.id }) || [];
             if (users && users.length > 0) {
 
                 let user = users[0];
 
-                let userRoles = await UserRoles.findAll({ where: { user_id: user._id } });
+                let userRoles = await UserRoles.find({ user_id: user._id });
 
-                let privileges = (await RolePrivileges.findAll({ where: { role_id: { $in: userRoles.map(x => x.role_id) } }, raw: true })).map(x => {
+                let privileges = (await RolePrivileges.find({ role_id: { $in: userRoles.map(x => x.role_id) } }).lean()).map(x => {
                     x.privilege = Enum.Privileges.find(p => p.Key == x.permission);
                     return x;
                 });

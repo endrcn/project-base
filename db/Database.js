@@ -1,16 +1,11 @@
 
-/**
- * MongoDB methods are in this class
- * This class is created with Singleton Pattern!
- */
-
 const mongoose = require("mongoose");
-const logger = require("../../lib/logger/loggerClass");
+const logger = require("../lib/logger/loggerClass");
 mongoose.Promise = Promise;
 
 let instance = null;
 
-class Mongo {
+class Database {
     constructor() {
         if (!instance) {
             this.mongoConnection = null;
@@ -21,7 +16,7 @@ class Mongo {
 
     async connect(options) {
         try {
-            console.log("MongoDB Connecting!");
+            logger.info("-", "Mongo", "connect", "MongoDB Connecting...");
             let db = await mongoose.connect(options.CONNECTION_STRING, { useNewUrlParser: true, useUnifiedTopology: true });
 
             this.mongoConnection = db;
@@ -30,8 +25,6 @@ class Mongo {
             logger.error("-", "Mongo", "connect", err);
         }
     }
-
 }
 
-
-module.exports = new Mongo();
+module.exports = Database;

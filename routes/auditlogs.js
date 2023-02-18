@@ -33,7 +33,7 @@ router.post('/', auth.checkRole("auditlog_view"), async (req, res) => {
       limit = body.limit;
     }
 
-    let logs = await AuditLogs.findAll({ where: query, order: [["createdAt", "DESC"]], limit });
+    let logs = await AuditLogs.find(query).sort({ createdAt: -1 }).limit(limit);
 
     return res.json(new Response().generateResponse(logs));
   } catch (err) {

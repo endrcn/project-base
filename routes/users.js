@@ -34,8 +34,8 @@ router.post("/", auth.authenticate(), auth.checkRole("user_view"), async (req, r
 
     if (typeof body.is_active === "boolean") query.is_active = body.is_active;
 
-    let users = await User.findAll({ where: query, raw: true });
-    let userRoles = await UserRoles.findAll({ where: { user_id: { $in: users.map(x => x._id) } } });
+    let users = await User.find(query).lean();
+    let userRoles = await UserRoles.find({ user_id: { $in: users.map(x => x._id) } });
 
     for (let i = 0; i < users.length; i++) {
       let roles = userRoles.filter(x => x.user_id == users[i]._id) || [];
@@ -61,18 +61,18 @@ router.post("/auth", async (req, res) => {
 
     User.validateFieldsBeforeAuth(email, pass);
 
-    let users = await User.findAll({ where: { email } });
+    let users = await User.find({ email });
     if (users.length == 0 || !users[0].is_active) throw new Error(Enum.HTTP_CODES.UNAUTHORIZED, "Validation Failed", "Email or password is wrong.");
     let user = users[0];
 
     if (!user.validPassword(pass)) throw new Error(Enum.HTTP_CODES.UNAUTHORIZED, "Validation Failed", "Email or password is wrong.");
 
-    let userRoles = (await UserRoles.findAll({ where: { user_id: user._id } })) || [];
+    let userRoles = (await UserRoles.find({ user_id: user._id })) || [];
 
     try {
-      userRoles = await Roles.findAll({ where: { _id: { $in: userRoles.map(ur => ur.role_id) } } });
+      userRoles = await Roles.find({ _id: { $in: userRoles.map(ur => ur.role_id) } }).lean();
       for (let i = 0; i < userRoles.length; i++) {
-        userRoles[i].dataValues.privilege = (await RolePrivileges.findAll({ where: { role_id: userRoles[i]._id } }) || []).map(x => {
+        userRoles[i].privilege = (await RolePrivileges.find({ role_id: userRoles[i]._id }) || []).map(x => {
           return Enum.Privileges.find(p => p.Key == x.permission)
         });
       }
@@ -117,7 +117,7 @@ router.post("/register", async (req, res) => {
       throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, i18n.USERS.VALIDATION_ERROR_TITLE, i18n.USERS.VALIDATION_ERROR_INFO);
     body.password = bcrypt.hashSync(body.password, bcrypt.genSaltSync(8), null);
 
-    let superAdminRole = await Roles.findOne({ where: { role_name: "SUPER_ADMIN" } });
+    let superAdminRole = await Roles.findOne({ role_name: "SUPER_ADMIN" });
 
     if (superAdminRole && superAdminRole._id) {
       return res.sendStatus(Enum.HTTP_CODES.NOT_FOUND);
@@ -195,7 +195,7 @@ router.post("/add", auth.authenticate(), auth.checkRole("user_add"), async (req,
 
     body.password = bcrypt.hashSync(body.password, bcrypt.genSaltSync(8), null);
 
-    let roles = await Roles.findAll({ where: { _id: { $in: body.role_ids } } });
+    let roles = await Roles.find({ _id: { $in: body.role_ids } });
 
     if (roles.length != body.role_ids.length) throw new Error(Enum.HTTP_CODES.NOT_FOUND, i18n.COMMON.VALIDATION_ERROR_TITLE, i18n.COMMON.VALIDATION_ERROR_INFO);
 
@@ -242,7 +242,7 @@ router.post("/update", auth.authenticate(), auth.checkRole("user_update"), async
 
     check.areThereEmptyFields(body, "id");
 
-    let user = await User.findOne({ where: { _id: body.id } });
+    let user = await User.findOne({ _id: body.id });
     if (user) {
 
       if (!check.isEmpty(body.password) && body.password.length < 8)
@@ -262,7 +262,7 @@ router.post("/update", auth.authenticate(), auth.checkRole("user_update"), async
 
       if (Array.isArray(body.role_ids) && body.role_ids.length > 0) {
 
-        let userRoles = await UserRoles.findAll({ where: { user_id: user._id } });
+        let userRoles = await UserRoles.find({ user_id: user._id });
 
         let role_ids = userRoles.map(x => x._id);
         if (role_ids.length > 0) {
@@ -294,9 +294,9 @@ router.post("/update", auth.authenticate(), auth.checkRole("user_update"), async
 
       updates.updated_by = req.user.id;
 
-      await User.update(updates, { where: { _id: user._id } });
+      await User.update(updates, { _id: user._id });
 
-      let updated = await User.findOne({ where: { _id: user._id } });
+      let updated = await User.findOne({ _id: user._id });
 
       updated.password = undefined;
 
@@ -324,7 +324,7 @@ router.post("/delete", auth.authenticate(), auth.checkRole("user_delete"), async
 
     check.areThereEmptyFields(body, "id");
 
-    let user = await User.findOne({ where: { _id: body.id } });
+    let user = await User.findOne({ _id: body.id });
 
     if (user) {
       await UserRoles.remove({ user_id: body.id })

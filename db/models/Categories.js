@@ -1,48 +1,19 @@
-const Sequelize = require("sequelize");
-const UserModel = require("./Users");
-const { v4: uuid } = require("uuid");
+const mongoose = require("mongoose");
 
-class Categories extends Sequelize.Model {
+const schema = mongoose.Schema({
+    name: { type: String, required: true },
+    is_active: { type: mongoose.Schema.Types.Boolean, default: true },
+    created_by: { type: mongoose.Schema.Types.ObjectId, required: true },
+    updated_by: { type: mongoose.Schema.Types.ObjectId }
+}, {
+    versionKey: false,
+    timestamps: true
+});
 
-    constructor(fields) {
-        super();
-        this.dataValues = fields;
 
-    }
-
-    static init(sequelize, DataTypes) {
-        Categories.db = super.init(
-            {
-                _id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
-                name: { type: DataTypes.STRING, allowNull: false },
-                created_by: { type: DataTypes.UUID, allowNull: false },
-                updated_by: { type: DataTypes.UUID },
-                is_active: { type: DataTypes.BOOLEAN, defaultValue: true }
-            },
-            {
-                modelName: "Categories",
-                sequelize
-            }
-        );
-
-        Categories.belongsTo(UserModel, { foreignKey: "created_by", targetKey: "_id" });
-
-        return Categories.db;
-    }
-
-    async save() {
-
-        if (!this.dataValues._id) {
-            this.dataValues._id = uuid();
-        }
-
-        await super.save();
-    }
-
-    static async remove(query) {
-        await super.destroy({ where: query });
-    }
+class Categories extends mongoose.Model {
 
 }
 
-module.exports = Categories.db || Categories;
+schema.loadClass(Categories);
+module.exports = mongoose.model("categories", schema, "categories");

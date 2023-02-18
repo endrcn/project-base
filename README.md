@@ -5,8 +5,7 @@ It's a project base that is written in Node.js(Express). The aim of this project
 ## 🚀 To Do
 
 - [x] Postman Collection and documentation will be prepared
-- [ ] MongoDB Database Models will be added.
-- [ ] SQL Indexing & column adder will be automated.
+- [x] MongoDB Database Models will be added.
 - [ ] HTTPS option will be added.
 - [ ] TFA will be added.
 - [ ] Security Checks & Updates.
@@ -42,11 +41,7 @@ You can run this project in your local with the following steps:
     Here is an example of the .env file.
 
     ```shell
-    DB_HOST=localhost
-    DB_NAME=project_base
-    DB_PASS=MyPass@word
-    DB_PORT=1433
-    DB_USER=sa
+    CONNECTION_STRING=mongodb://localhost:27017/project_base
     JWT_SECRET=8cgVcskCpM8FxGf8N8Zx3r8waXU79xK2FkaQZWVZNfBPS3Qy6RG3ZHEnzcDFKHk5Jp32UM87Ks6ES9FBcwBBV7ehhYXggsmNxxgF2eBHUaUJhg3gPZtDR2EgUnwKUcyI
     TZ=Europe/Istanbul
     ```

@@ -1,47 +1,26 @@
 const bcrypt = require("bcrypt-nodejs");
-const Sequelize = require("sequelize");
+const mongoose = require("mongoose");
 const is = require("is_js");
-const { v4: uuid } = require("uuid");
 
 const Enum = require("../../config/Enum");
 const Error = require("../../lib/Error");
 
+const schema = mongoose.Schema({
+    email: { type: String, required: true },
+    password: { type: String, required: true },
+    is_active: { type: mongoose.Schema.Types.Boolean, defaultValue: true },
+    first_name: { type: String, required: true },
+    last_name: { type: String, required: true },
+    phone_number: { type: String },
+    created_by: { type: mongoose.Schema.Types.ObjectId },
+    updated_by: { type: mongoose.Schema.Types.ObjectId },
+    language: { type: String, defaultValue: "en" }
+}, {
+    versionKey: false,
+    timestamps: true
+});
 
-class Users extends Sequelize.Model {
-
-    constructor(fields) {
-        super();
-        this.dataValues = fields;
-
-    }
-
-    static init(sequelize, DataTypes) {
-        Users.db = super.init(
-            {
-                _id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
-                email: { type: DataTypes.STRING, allowNull: false },
-                password: { type: DataTypes.STRING, allowNull: false },
-                is_active: { type: DataTypes.BOOLEAN, defaultValue: true },
-                first_name: { type: DataTypes.STRING, allowNull: false },
-                last_name: { type: DataTypes.STRING, allowNull: false },
-                phone_number: { type: DataTypes.STRING },
-                created_by: { type: DataTypes.UUID },
-                updated_by: { type: DataTypes.UUID },
-                language: { type: DataTypes.STRING, defaultValue: "en" }
-            },
-            {
-                indexes: [
-                    {
-                        unique: true,
-                        fields: ['email']
-                    }
-                ],
-                modelName: "Users",
-                sequelize
-            }
-        );
-        return Users.db;
-    }
+class Users extends mongoose.Model {
 
     static generateHash(password) {
         return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
@@ -65,36 +44,21 @@ class Users extends Sequelize.Model {
     }
 
     async save() {
-        if (!is.email(this.dataValues.email))
+        if (!is.email(this.email))
             throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, "Validation Failed", "Email field is not an email")
 
         //Password checking.
-        if (typeof this.dataValues.password !== "string" || this.dataValues.password.length < Enum.PASS_LENGTH)
+        if (typeof this.password !== "string" || this.password.length < Enum.PASS_LENGTH)
             throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, "Validation Failed", `Password field length must be greater than ${Enum.PASS_LENGTH}`);
 
         //first_name, last_name checking.
-        if ((!this.dataValues.first_name || !this.dataValues.last_name) || is.any.empty(this.dataValues.first_name, this.dataValues.last_name))
+        if ((!this.first_name || !this.last_name) || is.any.empty(this.first_name, this.last_name))
             throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, Enum.HTTP_CODES, "first_name and last_name fields are required");
-
-        if (!this.dataValues._id) {
-            this.dataValues._id = uuid();
-        }
 
         await super.save();
     }
 
-    static async count(query = {}) {
-        try {
-            return await super.count({ where: query });
-        } catch (err) {
-            console.error(err);
-        }
-    }
-
-    static async remove(query) {
-        await super.destroy({ where: query });
-    }
-
 }
 
-module.exports = Users.db || Users;
+schema.loadClass(Users);
+module.exports = mongoose.model("users", schema, "users");

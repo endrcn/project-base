@@ -1,55 +1,21 @@
-const Sequelize = require("sequelize");
-const UserModel = require("./Users");
-const { v4: uuid } = require("uuid");
+const mongoose = require("mongoose");
 
-class Roles extends Sequelize.Model {
+const schema = mongoose.Schema({
+    role_name: { type: String, required: true },
+    description: { type: String },
+    is_active: { type: mongoose.Schema.Types.Boolean, default: true },
+    created_by: { type: mongoose.Schema.Types.ObjectId, required: true },
+    updated_by: { type: mongoose.Schema.Types.ObjectId }
+}, {
+    versionKey: false,
+    timestamps: true
+});
 
-    constructor(fields) {
-        super();
-        this.dataValues = fields;
+schema.index({ role_name: 1 }, { unique: true });
 
-    }
-
-    static init(sequelize, DataTypes) {
-        Roles.db = super.init(
-            {
-                _id: { type: DataTypes.UUID, defaultValue: DataTypes.UUIDV4, primaryKey: true },
-                role_name: { type: DataTypes.STRING, allowNull: false },
-                description: { type: DataTypes.TEXT },
-                is_active: { type: DataTypes.BOOLEAN, defaultValue: true },
-                created_by: { type: DataTypes.UUID, allowNull: false },
-                updated_by: { type: DataTypes.UUID }
-            },
-            {
-                indexes: [
-                    {
-                        unique: true,
-                        fields: ['role_name']
-                    }
-                ],
-                modelName: "Roles",
-                sequelize
-            }
-        );
-
-        Roles.belongsTo(UserModel, { foreignKey: "created_by", targetKey: "_id" });
-
-        return Roles.db;
-    }
-
-    async save() {
-
-        if (!this.dataValues._id) {
-            this.dataValues._id = uuid();
-        }
-
-        await super.save();
-    }
-
-    static async remove(query) {
-        await super.destroy({ where: query });
-    }
+class Roles extends mongoose.Model {
 
 }
 
-module.exports = Roles.db || Roles;
+schema.loadClass(Roles);
+module.exports = mongoose.model("roles", schema, "roles");

@@ -31,14 +31,14 @@ router.post("/", auth.checkRole("role_view"), async (req, res) => {
 
     if (typeof body.is_active === "boolean") query.is_active = body.is_active;
 
-    let roles = await Roles.findAll({ where: query });
+    let roles = await Roles.find(query);
 
     for (let i = 0; i < roles.length; i++) {
-      let permissions = await RolePrivileges.findAll({ where: { role_id: roles[i]._id } });
+      let permissions = await RolePrivileges.find({ role_id: roles[i]._id });
       if (permissions.length > 0) {
-        roles[i].dataValues.permissions = permissions.map(x => x.permission);
+        roles[i].permissions = permissions.map(x => x.permission);
       } else {
-        roles[i].dataValues.permissions = [];
+        roles[i].permissions = [];
       }
     }
 
@@ -105,12 +105,12 @@ router.post('/update', auth.checkRole("role_update"), async (req, res) => {
 
     updates.updated_by = req.user.id;
 
-    await Roles.update(updates, { where: { _id: body._id } });
+    await Roles.update(updates, { _id: body._id });
 
-    let updated = (await Roles.findAll({ where: { _id: body._id } }) || [])[0] || {};
+    let updated = (await Roles.find({ _id: body._id }) || [])[0] || {};
 
     if (Array.isArray(body.permissions) && body.permissions.length > 0) {
-      let permissions = await RolePrivileges.findAll({ where: { role_id: body._id } });
+      let permissions = await RolePrivileges.find({ role_id: body._id });
 
       let removedPermissions = permissions.filter(x => !body.permissions.includes(x.permission)).map(x => x._id);
       let newPermissions = body.permissions.filter(x => !permissions.map(x => x.permission).includes(x));
@@ -134,7 +134,7 @@ router.post('/update', auth.checkRole("role_update"), async (req, res) => {
 
     auditLogs.info(req.user.email, "Role", "Update", `${updated.role_name} ${i18n.LOGS.ROLE_UPDATE}`);
 
-    res.json(new Response().generateResponse({success: true}));
+    res.json(new Response().generateResponse({ success: true }));
   } catch (err) {
     let response = new Response().generateError(err);
     res.status(response.code)
@@ -150,7 +150,7 @@ router.post('/delete', auth.checkRole("role_delete"), async (req, res) => {
 
     check.areThereEmptyFields(body, "id");
 
-    let updated = (await Roles.findAll({ where: { _id: body.id } }) || [])[0] || {};
+    let updated = (await Roles.find({ _id: body.id }) || [])[0] || {};
 
     await RolePrivileges.remove({ role_id: body.id });
 

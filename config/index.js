@@ -1,13 +1,7 @@
 module.exports = {
     PORT: process.env.PORT || 3000,
     DB: {
-        TYPE: process.env.DB_TYPE || "mongo",
-        DB_NAME: process.env.DB_NAME,
-        USER: process.env.DB_USER,
-        PASS: process.env.DB_PASS,
-        HOST: process.env.DB_HOST,
-        DOMAIN: process.env.DOMAIN,
-        PORT: !isNaN(parseInt(process.env.DB_PORT)) ? parseInt(process.env.DB_PORT) : 1433
+        CONNECTION_STRING: process.env.CONNECTION_STRING || "mongodb://localhost:27017/project_base",
     },
     TOKEN_EXPIRE_TIME: !isNaN(parseInt(process.env.TOKEN_EXPIRE_TIME)) ? parseInt(process.env.TOKEN_EXPIRE_TIME) : 60 * 60 * 24, // minutes
     JWT: {
