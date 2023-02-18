@@ -7,14 +7,15 @@
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
-const config = require("../config");
+const config = require("../../config");
 
-const UserModel = require("./models/Users");
-const RoleModel = require("./models/Roles");
-const RolePrivilegeModel = require("./models/RolePrivileges");
-const UserRoles = require("./models/UserRoles");
-const Categories = require("./models/Categories");
-const AuditLogs = require("./models/AuditLogs");
+const UserModel = require("../models/Users");
+const RoleModel = require("../models/Roles");
+const RolePrivilegeModel = require("../models/RolePrivileges");
+const UserRoles = require("../models/UserRoles");
+const Categories = require("../models/Categories");
+const AuditLogs = require("../models/AuditLogs");
+const logger = require("../../lib/logger/loggerClass");
 
 let instance = null;
 
@@ -57,7 +58,7 @@ const operatorsAliases = {
     $col: Op.col
 };
 
-class Database {
+class Relational {
     constructor() {
         if (!instance) {
             this.sequelizeConnection = null;
@@ -66,8 +67,7 @@ class Database {
         return instance;
     }
 
-    async connect(options, next, params = {}) {
-        if (!next) next = () => { }
+    async connect(options) {
         var seqconfig = {
             host: options.HOST,
             port: options.PORT,
@@ -106,28 +106,17 @@ class Database {
             sequelize = new Sequelize(options.DB_NAME, options.USER, options.PASS, seqconfig);
         }
 
+        logger.info("-", "Relational", "Connect", options.TYPE + " Connecting!")
+        try {
+            await sequelize.authenticate();
+            this.sequelizeConnection = sequelize;
+            console.log(options.TYPE, "Connection Established!");
+            this.initialModels(sequelize);
+        } catch (err) {
+            console.error('Unable to connect to the database:', err);
+            process.exit(1);
+        }
 
-
-        console.log(options.TYPE, "Connecting!");
-        sequelize
-            .authenticate()
-            .then(() => {
-                this.sequelizeConnection = sequelize;
-                console.log(options.TYPE, "Connection Established!");
-                this.initialModels(sequelize, () => {
-                    next(true);
-                }, params);
-            })
-            .catch(err => {
-                console.error('Unable to connect to the database:', err);
-                throw err;
-            });
-
-    }
-
-    checkConnection() {
-        this.sequelizeConnection.authenticate()
-            .then(() => { }).catch(err => { console.error("CONN ERR", err.message); });
     }
 
     async initialModels(sequelize) {
@@ -148,4 +137,4 @@ class Database {
 }
 
 
-module.exports = new Database();
+module.exports = new Relational();

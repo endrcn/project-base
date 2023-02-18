@@ -11,7 +11,7 @@ var debug = require('debug')('api:server');
 var http = require('http');
 
 const config = require("../config");
-const database = require("../db/Database");
+const Database = require("../db/orm/Database");
 
 /**
  * Get port from environment and store in Express.
@@ -93,19 +93,7 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 
-
-  database.connect(config.DB, (connected, err) => {
-    try {
-      if (err) throw err;
-
-      if (connected) {
-        console.log("DB CONNECTION ESTABLISHED!");
-      }
-
-    } catch (err) {
-      console.error("DB CONNECTION FAILED!", err)
-      process.exit(1)
-    }
-  })
+  const database = new Database(config.DB.TYPE);
+  database.connect(config.DB);
 
 }

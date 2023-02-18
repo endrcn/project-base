@@ -1,7 +1,7 @@
 module.exports = {
     PORT: process.env.PORT || 3000,
     DB: {
-        TYPE: process.env.DB_TYPE || "mssql",
+        TYPE: process.env.DB_TYPE || "mongo",
         DB_NAME: process.env.DB_NAME,
         USER: process.env.DB_USER,
         PASS: process.env.DB_PASS,
