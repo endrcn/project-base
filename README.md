@@ -4,8 +4,9 @@ It's a project base that is written in Node.js(Express). The aim of this project
 
 ## 🚀 To Do
 
-- [x] Postman Collection and documentation will be prepared
+- [x] [Postman Collection](https://github.com/endrcn/project-base/blob/main/docs/postman_collection.json) and [Environments](https://github.com/endrcn/project-base/blob/main/docs/postman_environment.json) will be prepared.
 - [x] MongoDB Database Models will be added.
+- [ ] Documentation will be prepared
 - [ ] HTTPS option will be added.
 - [ ] TFA will be added.
 - [ ] Security Checks & Updates.
