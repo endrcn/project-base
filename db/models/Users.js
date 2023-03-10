@@ -14,7 +14,7 @@ const schema = mongoose.Schema({
     phone_number: { type: String },
     created_by: { type: mongoose.Schema.Types.ObjectId },
     updated_by: { type: mongoose.Schema.Types.ObjectId },
-    language: { type: String, defaultValue: "en" }
+    language: { type: String, defaultValue: Enum.LANG.en }
 }, {
     versionKey: false,
     timestamps: true

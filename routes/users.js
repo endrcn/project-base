@@ -207,7 +207,7 @@ router.post("/add", auth.authenticate(), auth.checkRole("user_add"), async (req,
       phone_number: body.phone_number || "",
       is_active: true,
       created_by: req.user.id,
-      language: Enum.LANG[body.language] || "en"
+      language: Enum.LANG[body.language] || Enum.LANG.en
     });
 
     await user.save();
