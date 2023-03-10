@@ -189,8 +189,7 @@ router.post("/add", auth.authenticate(), auth.checkRole("user_add"), async (req,
 
     if (body.password.length < 8)
       throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, i18n.USERS.VALIDATION_ERROR_TITLE, i18n.USERS.PASSWORD_LENGTH_ERROR);
-    var re = /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))\s*?/;
-    if (!re.test(String(body.email).toLowerCase()))
+    if (!check.checkPassword(String(body.email).toLowerCase()))
       throw new Error(Enum.HTTP_CODES.UNPROCESSIBLE_ENTITY, i18n.USERS.VALIDATION_ERROR_TITLE, i18n.USERS.EMAIL_VALIDATION_ERROR);
 
     body.password = bcrypt.hashSync(body.password, bcrypt.genSaltSync(8), null);
