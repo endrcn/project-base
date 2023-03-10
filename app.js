@@ -4,6 +4,7 @@ var path = require('path');
 var logger = require('morgan');
 const compression = require('compression');
 const cors = require("cors");
+const fs = require("fs");
 
 var app = express();
 
@@ -19,12 +20,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(compression());
 
+const apiRoutes = fs.readdirSync(path.join("routes"));
 
-app.use('/api/users', require('./routes/users'));
-app.use('/api/roles', require('./routes/roles'));
-app.use('/api/categories', require('./routes/categories'));
-app.use('/api/auditlogs', require('./routes/auditlogs'));
-app.use('/api/events', require('./routes/events'));
+for (let route of apiRoutes) {
+  let routeName = route.split(".")[0];
+  let routeExt = path.extname(route);
+  if (routeExt == ".js" && route != "index.js") {
+    app.use("/api/" + routeName, require("./routes/" + routeName));
+  }
+}
+
 app.use('/*', require('./routes/index'));
 
 // catch 404 and forward to error handler
