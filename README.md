@@ -18,7 +18,7 @@ It's a project base that is written in Node.js(Express). The aim of this project
 - All CRUD operations for Roles
 - All CRUD operations for Categories
 - Basic Audit Log mechanism
-- MSSQL DB Connection and table relationships
+- MongoDB Connection and table relationships
 - SSE Integration
 - Winston Logger
 - Multi Language Support
