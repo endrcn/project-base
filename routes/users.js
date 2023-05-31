@@ -293,7 +293,7 @@ router.post("/update", auth.authenticate(), auth.checkRole("user_update"), async
 
       updates.updated_by = req.user.id;
 
-      await User.update(updates, { _id: user._id });
+      await User.updateOne({ _id: user._id }, updates);
 
       let updated = await User.findOne({ _id: user._id });
 

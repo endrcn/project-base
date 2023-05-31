@@ -69,7 +69,7 @@ router.post('/update', auth.checkRole("category_update"), async (req, res) => {
 
     updates.updated_by = req.user.id;
 
-    await Categories.update(updates, { _id: body._id });
+    await Categories.updateOne({ _id: body._id }, updates);
 
     let updated = (await Categories.find({ _id: body._id }) || [])[0] || {};
 

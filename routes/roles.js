@@ -105,7 +105,7 @@ router.post('/update', auth.checkRole("role_update"), async (req, res) => {
 
     updates.updated_by = req.user.id;
 
-    await Roles.update(updates, { _id: body._id });
+    await Roles.updateOne({ _id: body._id }, updates);
 
     let updated = (await Roles.find({ _id: body._id }) || [])[0] || {};
 
